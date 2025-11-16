@@ -1,0 +1,74 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+      
+    - name: Show Xcode version
+      run: xcodebuild -version
+      
+    - name: Show available simulators
+      run: xcodebuild -showsdks
+      
+    - name: Build iOS app
+      run: |
+        xcodebuild clean build \
+          -project MoscowTime.xcodeproj \
+          -scheme MoscowTime \
+          -sdk iphoneos \
+          -configuration Release \
+          -destination 'generic/platform=iOS' \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
+      
+    - name: Create archive
+      run: |
+        xcodebuild archive \
+          -project MoscowTime.xcodeproj \
+          -scheme MoscowTime \
+          -sdk iphoneos \
+          -configuration Release \
+          -archivePath ./build/MoscowTime.xcarchive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
+      
+    - name: Export IPA (unsigned)
+      run: |
+        mkdir -p ./build/ipa
+        xcodebuild -exportArchive \
+          -archivePath ./build/MoscowTime.xcarchive \
+          -exportPath ./build/ipa \
+          -exportOptionsPlist ExportOptions.plist \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO || true
+      
+    - name: Create unsigned IPA manually
+      run: |
+        mkdir -p ./build/ipa/Payload
+        cp -r ./build/MoscowTime.xcarchive/Products/Applications/MoscowTime.app ./build/ipa/Payload/
+        cd ./build/ipa
+        zip -r MoscowTime.ipa Payload
+        cd ../..
+      
+    - name: Upload IPA artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MoscowTime-IPA
+        path: ./build/ipa/MoscowTime.ipa
+        retention-days: 30
+
