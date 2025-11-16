@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		A1000001294A1A0000000001 /* MoscowTimeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000294A1A0000000001 /* MoscowTimeApp.swift */; };
 		A1000002294A1A0000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001294A1A0000000002 /* ContentView.swift */; };
-		A1000003294A1A0000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000004294A1A0000000005 /* Assets.xcassets */; };
+		A1000003294A1A0000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000004294A1A0000000006 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,7 +17,7 @@
 		A1000000294A1A0000000001 /* MoscowTimeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoscowTimeApp.swift; sourceTree = "<group>"; };
 		A1000001294A1A0000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A1000002294A1A0000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A1000004294A1A0000000005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1000004294A1A0000000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +52,7 @@
 			children = (
 				A1000000294A1A0000000001 /* MoscowTimeApp.swift */,
 				A1000001294A1A0000000002 /* ContentView.swift */,
-				A1000004294A1A0000000005 /* Assets.xcassets */,
+				A1000004294A1A0000000006 /* Assets.xcassets */,
 				A1000002294A1A0000000003 /* Info.plist */,
 			);
 			path = MoscowTime;
@@ -63,7 +63,7 @@
 /* Begin PBXNativeTarget section */
 		A0FFFFFE294A1A0000000001 /* MoscowTime */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A1000004294A1A0000000005 /* Build configuration list for PBXNativeTarget "MoscowTime" */;
+			buildConfigurationList = A1000004294A1A0000000007 /* Build configuration list for PBXNativeTarget "MoscowTime" */;
 			buildPhases = (
 				A0FFFFFB294A1A0000000000 /* Sources */,
 				A0FFFFFC294A1A0000000000 /* Frameworks */,
@@ -324,7 +324,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A1000004294A1A0000000005 /* Build configuration list for PBXNativeTarget "MoscowTime" */ = {
+		A1000004294A1A0000000007 /* Build configuration list for PBXNativeTarget "MoscowTime" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A1000005294A1A0000000006 /* Debug */,
