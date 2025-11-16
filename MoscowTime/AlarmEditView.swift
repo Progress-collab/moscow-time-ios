@@ -13,6 +13,8 @@ struct AlarmEditView: View {
     @State private var weekdays: Set<Int> = [2, 3, 4, 5, 6] // Рабочие дни по умолчанию
     @State private var name: String = ""
     @State private var isEnabled: Bool = true
+    @State private var isOneTime: Bool = false
+    @State private var oneTimeDate: Date = Date()
     
     private let weekdayNames = [
         1: "Воскресенье",
