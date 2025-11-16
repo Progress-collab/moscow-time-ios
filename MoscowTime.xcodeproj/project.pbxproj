@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A1000001294A1A0000000001 /* MoscowTimeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000294A1A0000000001 /* MoscowTimeApp.swift */; };
 		A1000002294A1A0000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001294A1A0000000002 /* ContentView.swift */; };
+		A1000003294A1A0000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000004294A1A0000000005 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -16,6 +17,7 @@
 		A1000000294A1A0000000001 /* MoscowTimeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoscowTimeApp.swift; sourceTree = "<group>"; };
 		A1000001294A1A0000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A1000002294A1A0000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1000004294A1A0000000005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 			children = (
 				A1000000294A1A0000000001 /* MoscowTimeApp.swift */,
 				A1000001294A1A0000000002 /* ContentView.swift */,
+				A1000004294A1A0000000005 /* Assets.xcassets */,
 				A1000002294A1A0000000003 /* Info.plist */,
 			);
 			path = MoscowTime;
@@ -113,6 +116,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1000003294A1A0000000005 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

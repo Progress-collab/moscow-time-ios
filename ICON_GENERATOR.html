@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор иконки для MoscowTime</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            display: block;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .sizes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .size-item {
+            text-align: center;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .instructions {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Генератор иконки для MoscowTime</h1>
+        
+        <div class="instructions">
+            <p><strong>Инструкция:</strong></p>
+            <ol>
+                <li>Нажмите кнопку "Сгенерировать иконку" для создания иконки</li>
+                <li>Нажмите на нужный размер для скачивания PNG файла</li>
+                <li>Сохраните файлы в папку <code>MoscowTime/Assets.xcassets/AppIcon.appiconset/</code></li>
+                <li>Переименуйте файлы согласно размерам (например, icon-40@2x.png, icon-60@3x.png и т.д.)</li>
+            </ol>
+        </div>
+
+        <div class="controls">
+            <button onclick="generateIcon()">Сгенерировать иконку</button>
+            <button onclick="generateAllSizes()">Сгенерировать все размеры</button>
+        </div>
+
+        <canvas id="iconCanvas" width="1024" height="1024"></canvas>
+
+        <div class="sizes" id="sizesContainer"></div>
+    </div>
+
+    <script>
+        const sizes = [
+            { name: '20@1x (iPad)', size: 20, filename: 'icon-20@1x.png' },
+            { name: '20@2x', size: 40, filename: 'icon-20@2x.png' },
+            { name: '20@3x', size: 60, filename: 'icon-20@3x.png' },
+            { name: '29@1x (iPad)', size: 29, filename: 'icon-29@1x.png' },
+            { name: '29@2x', size: 58, filename: 'icon-29@2x.png' },
+            { name: '29@3x', size: 87, filename: 'icon-29@3x.png' },
+            { name: '40@1x (iPad)', size: 40, filename: 'icon-40@1x.png' },
+            { name: '40@2x', size: 80, filename: 'icon-40@2x.png' },
+            { name: '40@3x', size: 120, filename: 'icon-40@3x.png' },
+            { name: '60@2x', size: 120, filename: 'icon-60@2x.png' },
+            { name: '60@3x', size: 180, filename: 'icon-60@3x.png' },
+            { name: '76@1x', size: 76, filename: 'icon-76@1x.png' },
+            { name: '76@2x', size: 152, filename: 'icon-76@2x.png' },
+            { name: '83.5@2x', size: 167, filename: 'icon-83.5@2x.png' },
+            { name: '1024', size: 1024, filename: 'icon-1024.png' }
+        ];
+
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+
+            // Градиентный фон
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+
+            // Белый круг для часов
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Стрелки часов
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = size * 0.03;
+            ctx.lineCap = 'round';
+
+            // Часовая стрелка (показывает 3 часа)
+            ctx.save();
+            ctx.translate(size / 2, size / 2);
+            ctx.rotate(Math.PI / 2); // 3 часа = 90 градусов
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(size * 0.15, 0);
+            ctx.stroke();
+            ctx.restore();
+
+            // Минутная стрелка (показывает 12)
+            ctx.save();
+            ctx.translate(size / 2, size / 2);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -size * 0.2);
+            ctx.stroke();
+            ctx.restore();
+
+            // Центральная точка
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size * 0.04, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Буква "М" внизу
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${size * 0.25}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText('М', size / 2, size * 0.85);
+        }
+
+        function generateIcon() {
+            const canvas = document.getElementById('iconCanvas');
+            drawIcon(canvas, 1024);
+        }
+
+        function downloadIcon(size, filename) {
+            const canvas = document.createElement('canvas');
+            drawIcon(canvas, size.size);
+            
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        function generateAllSizes() {
+            sizes.forEach(item => {
+                setTimeout(() => downloadIcon(item, item.filename), sizes.indexOf(item) * 200);
+            });
+        }
+
+        function createSizeButtons() {
+            const container = document.getElementById('sizesContainer');
+            sizes.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'size-item';
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                drawIcon(canvas, 100);
+                
+                const button = document.createElement('button');
+                button.textContent = `${item.name} (${item.size}x${item.size})`;
+                button.onclick = () => downloadIcon(item, item.filename);
+                
+                div.appendChild(canvas);
+                div.appendChild(document.createElement('br'));
+                div.appendChild(button);
+                container.appendChild(div);
+            });
+        }
+
+        // Инициализация
+        generateIcon();
+        createSizeButtons();
+    </script>
+</body>
+</html>
+
