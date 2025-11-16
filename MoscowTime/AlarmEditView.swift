@@ -2,8 +2,9 @@ import SwiftUI
 
 struct AlarmEditView: View {
     @ObservedObject var alarmStore: AlarmStore
-    @StateObject private var alarmManager = AlarmManager.shared
     @Environment(\.dismiss) var dismiss
+    
+    private let alarmManager = AlarmManager.shared
     
     let alarm: Alarm?
     

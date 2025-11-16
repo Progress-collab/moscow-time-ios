@@ -2,10 +2,11 @@ import SwiftUI
 
 struct AlarmListView: View {
     @ObservedObject var alarmStore: AlarmStore
-    @StateObject private var alarmManager = AlarmManager.shared
     @State private var showingAddAlarm = false
     @State private var editingAlarm: Alarm?
     @State private var showingPermissionAlert = false
+    
+    private let alarmManager = AlarmManager.shared
     
     var body: some View {
         NavigationView {
