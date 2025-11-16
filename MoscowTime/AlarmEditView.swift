@@ -34,36 +34,50 @@ struct AlarmEditView: View {
             _weekdays = State(initialValue: alarm.weekdays)
             _name = State(initialValue: alarm.name ?? "")
             _isEnabled = State(initialValue: alarm.isEnabled)
+            _isOneTime = State(initialValue: alarm.isOneTime)
+            _oneTimeDate = State(initialValue: alarm.oneTimeDate ?? Date())
         }
     }
     
     var body: some View {
         NavigationView {
             Form {
+                Section {
+                    Toggle("Разовый будильник", isOn: $isOneTime)
+                }
+                
                 Section("Время") {
-                    DatePicker("Время", selection: Binding(
-                        get: {
-                            let calendar = Calendar.current
-                            var components = DateComponents()
-                            components.hour = selectedHour
-                            components.minute = selectedMinute
-                            return calendar.date(from: components) ?? Date()
-                        },
-                        set: { date in
-                            let calendar = Calendar.current
-                            let components = calendar.dateComponents([.hour, .minute], from: date)
-                            selectedHour = components.hour ?? 7
-                            selectedMinute = components.minute ?? 0
-                        }
-                    ), displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.wheel)
+                    if isOneTime {
+                        DatePicker("Дата и время", selection: $oneTimeDate, displayedComponents: [.date, .hourAndMinute])
+                            .datePickerStyle(.wheel)
+                            .labelsHidden()
+                    } else {
+                        DatePicker("Время", selection: Binding(
+                            get: {
+                                let calendar = Calendar.current
+                                var components = DateComponents()
+                                components.hour = selectedHour
+                                components.minute = selectedMinute
+                                return calendar.date(from: components) ?? Date()
+                            },
+                            set: { date in
+                                let calendar = Calendar.current
+                                let components = calendar.dateComponents([.hour, .minute], from: date)
+                                selectedHour = components.hour ?? 7
+                                selectedMinute = components.minute ?? 0
+                            }
+                        ), displayedComponents: .hourAndMinute)
+                        .datePickerStyle(.wheel)
+                        .labelsHidden()
+                    }
                 }
                 
                 Section("Название (необязательно)") {
                     TextField("Название будильника", text: $name)
                 }
                 
-                Section("Дни недели") {
+                if !isOneTime {
+                    Section("Дни недели") {
                     Button(action: {
                         weekdays = [2, 3, 4, 5, 6] // Рабочие дни
                     }) {
@@ -104,6 +118,7 @@ struct AlarmEditView: View {
                             }
                         ))
                     }
+                    }
                 }
                 
                 Section {
@@ -122,20 +137,37 @@ struct AlarmEditView: View {
                     Button("Сохранить") {
                         saveAlarm()
                     }
-                    .disabled(weekdays.isEmpty)
+                    .disabled(!isOneTime && weekdays.isEmpty)
                 }
             }
         }
     }
     
     private func saveAlarm() {
+        let calendar = Calendar.current
+        let moscowTimeZone = TimeZone(identifier: "Europe/Moscow")!
+        
+        var finalHour = selectedHour
+        var finalMinute = selectedMinute
+        var finalOneTimeDate: Date? = nil
+        
+        if isOneTime {
+            // Для разового будильника извлекаем час и минуту из oneTimeDate
+            let components = calendar.dateComponents(in: moscowTimeZone, from: oneTimeDate)
+            finalHour = components.hour ?? 7
+            finalMinute = components.minute ?? 0
+            finalOneTimeDate = oneTimeDate
+        }
+        
         let newAlarm = Alarm(
             id: alarm?.id ?? UUID(),
-            hour: selectedHour,
-            minute: selectedMinute,
-            weekdays: weekdays,
+            hour: finalHour,
+            minute: finalMinute,
+            weekdays: isOneTime ? [] : weekdays,
             isEnabled: isEnabled,
-            name: name.isEmpty ? nil : name
+            name: name.isEmpty ? nil : name,
+            isOneTime: isOneTime,
+            oneTimeDate: finalOneTimeDate
         )
         
         if let existingAlarm = alarm {

@@ -113,12 +113,21 @@ struct AlarmRowView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(alarm.timeString)
-                    .font(.system(size: 32, weight: .light, design: .default))
-                
-                Text(alarm.weekdaysString)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                if alarm.isOneTime {
+                    Text(alarm.weekdaysString)
+                        .font(.system(size: 24, weight: .medium, design: .default))
+                    
+                    Text("Разовый будильник")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                } else {
+                    Text(alarm.timeString)
+                        .font(.system(size: 32, weight: .light, design: .default))
+                    
+                    Text(alarm.weekdaysString)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
                 
                 if let name = alarm.name, !name.isEmpty {
                     Text(name)

@@ -7,14 +7,18 @@ struct Alarm: Identifiable, Codable {
     var weekdays: Set<Int> // 1=воскресенье, 2=понедельник, ..., 7=суббота
     var isEnabled: Bool
     var name: String?
+    var isOneTime: Bool
+    var oneTimeDate: Date?
     
-    init(id: UUID = UUID(), hour: Int, minute: Int, weekdays: Set<Int> = [2, 3, 4, 5, 6], isEnabled: Bool = true, name: String? = nil) {
+    init(id: UUID = UUID(), hour: Int, minute: Int, weekdays: Set<Int> = [2, 3, 4, 5, 6], isEnabled: Bool = true, name: String? = nil, isOneTime: Bool = false, oneTimeDate: Date? = nil) {
         self.id = id
         self.hour = hour
         self.minute = minute
         self.weekdays = weekdays
         self.isEnabled = isEnabled
         self.name = name
+        self.isOneTime = isOneTime
+        self.oneTimeDate = oneTimeDate
     }
     
     var timeString: String {

@@ -26,29 +26,69 @@ class AlarmManager {
         // Удаляем старые уведомления для этого будильника
         removeAlarm(alarm)
         
-        // Создаем уведомление для каждого дня недели
-        for weekday in alarm.weekdays {
-            let content = UNMutableNotificationContent()
-            content.title = alarm.name ?? "Будильник"
-            content.body = "Время: \(alarm.timeString)"
-            content.sound = .default
-            content.categoryIdentifier = "ALARM"
+        let content = UNMutableNotificationContent()
+        content.title = alarm.name ?? "Будильник"
+        content.sound = .default
+        content.categoryIdentifier = "ALARM"
+        
+        if alarm.isOneTime {
+            // Разовый будильник
+            guard let oneTimeDate = alarm.oneTimeDate else { return }
             
-            // Настраиваем триггер для конкретного дня недели
+            // Проверяем, что дата в будущем
+            if oneTimeDate <= Date() {
+                print("Разовый будильник не может быть в прошлом")
+                return
+            }
+            
+            let calendar = Calendar.current
+            let components = calendar.dateComponents(in: moscowTimeZone, from: oneTimeDate)
+            
+            let formatter = DateFormatter()
+            formatter.timeZone = moscowTimeZone
+            formatter.locale = Locale(identifier: "ru_RU")
+            formatter.dateFormat = "d MMMM yyyy, HH:mm"
+            content.body = formatter.string(from: oneTimeDate)
+            
             var dateComponents = DateComponents()
-            dateComponents.weekday = weekday
-            dateComponents.hour = alarm.hour
-            dateComponents.minute = alarm.minute
+            dateComponents.year = components.year
+            dateComponents.month = components.month
+            dateComponents.day = components.day
+            dateComponents.hour = components.hour
+            dateComponents.minute = components.minute
             dateComponents.timeZone = moscowTimeZone
             
-            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
             
-            let identifier = "\(alarm.id.uuidString)-\(weekday)"
+            let identifier = "\(alarm.id.uuidString)-onetime"
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             
             center.add(request) { error in
                 if let error = error {
-                    print("Ошибка при создании уведомления: \(error.localizedDescription)")
+                    print("Ошибка при создании разового уведомления: \(error.localizedDescription)")
+                }
+            }
+        } else {
+            // Повторяющийся будильник
+            content.body = "Время: \(alarm.timeString)"
+            
+            // Создаем уведомление для каждого дня недели
+            for weekday in alarm.weekdays {
+                var dateComponents = DateComponents()
+                dateComponents.weekday = weekday
+                dateComponents.hour = alarm.hour
+                dateComponents.minute = alarm.minute
+                dateComponents.timeZone = moscowTimeZone
+                
+                let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+                
+                let identifier = "\(alarm.id.uuidString)-\(weekday)"
+                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+                
+                center.add(request) { error in
+                    if let error = error {
+                        print("Ошибка при создании уведомления: \(error.localizedDescription)")
+                    }
                 }
             }
         }
@@ -56,7 +96,14 @@ class AlarmManager {
     
     func removeAlarm(_ alarm: Alarm) {
         let center = UNUserNotificationCenter.current()
-        let identifiers = alarm.weekdays.map { "\(alarm.id.uuidString)-\($0)" }
+        var identifiers: [String]
+        
+        if alarm.isOneTime {
+            identifiers = ["\(alarm.id.uuidString)-onetime"]
+        } else {
+            identifiers = alarm.weekdays.map { "\(alarm.id.uuidString)-\($0)" }
+        }
+        
         center.removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     
