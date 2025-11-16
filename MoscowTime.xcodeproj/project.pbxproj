@@ -10,6 +10,11 @@
 		A1000001294A1A0000000001 /* MoscowTimeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000294A1A0000000001 /* MoscowTimeApp.swift */; };
 		A1000002294A1A0000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000001294A1A0000000002 /* ContentView.swift */; };
 		A1000003294A1A0000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000004294A1A0000000006 /* Assets.xcassets */; };
+		A1000008294A1A0000000008 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000007294A1A0000000007 /* Alarm.swift */; };
+		A1000009294A1A0000000009 /* AlarmStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000008294A1A0000000008 /* AlarmStore.swift */; };
+		A100000A294A1A000000000A /* AlarmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000009294A1A0000000009 /* AlarmManager.swift */; };
+		A100000B294A1A000000000B /* AlarmListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000A294A1A000000000A /* AlarmListView.swift */; };
+		A100000C294A1A000000000C /* AlarmEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000B294A1A000000000C /* AlarmEditView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +23,11 @@
 		A1000001294A1A0000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A1000002294A1A0000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1000004294A1A0000000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1000007294A1A0000000007 /* Alarm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
+		A1000008294A1A0000000008 /* AlarmStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmStore.swift; sourceTree = "<group>"; };
+		A1000009294A1A0000000009 /* AlarmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmManager.swift; sourceTree = "<group>"; };
+		A100000A294A1A000000000A /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
+		A100000B294A1A000000000C /* AlarmEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmEditView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
