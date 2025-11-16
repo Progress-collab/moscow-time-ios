@@ -20,6 +20,8 @@ class AlarmStore: ObservableObject {
     func saveAlarms() {
         if let encoded = try? JSONEncoder().encode(alarms) {
             UserDefaults.standard.set(encoded, forKey: userDefaultsKey)
+            // Обновляем уведомления при сохранении
+            AlarmManager.shared.updateAllAlarms(alarms)
         }
     }
     

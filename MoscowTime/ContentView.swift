@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var currentTime = Date()
-    @StateObject private var alarmStore = AlarmStore()
+    @EnvironmentObject var alarmStore: AlarmStore
     let moscowTimeZone = TimeZone(identifier: "Europe/Moscow")!
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
