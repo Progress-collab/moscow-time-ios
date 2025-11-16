@@ -107,7 +107,8 @@ struct AlarmListView: View {
 struct AlarmRowView: View {
     let alarm: Alarm
     @ObservedObject var alarmStore: AlarmStore
-    @StateObject private var alarmManager = AlarmManager.shared
+    
+    private let alarmManager = AlarmManager.shared
     
     var body: some View {
         HStack {
