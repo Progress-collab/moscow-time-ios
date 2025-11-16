@@ -6,8 +6,64 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Swift Code Linting
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Select Xcode version
+      run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+      
+    - name: Show Xcode version
+      run: xcodebuild -version
+      
+    - name: Check Swift code with xcodebuild
+      run: |
+        echo "Checking Swift code for errors and warnings..."
+        xcodebuild clean build \
+          -project MoscowTime.xcodeproj \
+          -scheme MoscowTime \
+          -sdk iphonesimulator \
+          -configuration Debug \
+          -destination 'platform=iOS Simulator,name=iPhone 15' \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO 2>&1 | tee build.log
+        
+        # Extract warnings and errors
+        WARNINGS=$(grep -c "warning:" build.log || echo "0")
+        ERRORS=$(grep -c "error:" build.log || echo "0")
+        
+        echo "Found $WARNINGS warnings and $ERRORS errors"
+        
+        if [ "$ERRORS" -gt "0" ]; then
+          echo "❌ Build failed with $ERRORS errors"
+          grep "error:" build.log || true
+          exit 1
+        fi
+        
+        if [ "$WARNINGS" -gt "0" ]; then
+          echo "⚠️ Build succeeded with $WARNINGS warnings"
+          grep "warning:" build.log | head -20 || true
+        else
+          echo "✅ Build succeeded with no warnings"
+        fi
+      continue-on-error: true
+      
+    - name: Upload build log
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: build.log
+        retention-days: 7
+
   build:
     runs-on: macos-latest
+    needs: lint
     permissions:
       contents: write
     
